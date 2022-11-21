@@ -1,0 +1,26 @@
+# Based on https://colinsalmcorner.com/consuming-environment-secrets-in-reusable-workflows/
+
+name: Deployment Template
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+    secrets:
+      PASSWORD:
+        required: true
+
+jobs:
+  deploy:
+    name: Deploy to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    
+    steps:
+    - name: Dump Password
+      run: |
+        echo Password is $PASSWORD
+      env:
+        PASSWORD: ${{ secrets.PASSWORD }}
